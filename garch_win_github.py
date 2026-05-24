@@ -8,8 +8,11 @@ import pandas as pd
 import numpy as np
 from arch import arch_model
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import warnings, os, json
 warnings.filterwarnings("ignore")
+
+FUSO_BR = ZoneInfo("America/Sao_Paulo")
 
 # ── CONFIGURAÇÕES ─────────────────────────────
 TICKER         = "^BVSP"
@@ -164,7 +167,7 @@ html = f"""<!DOCTYPE html>
     </div>
     <div class="header-right">
       <div class="live-badge"><span class="live-dot"></span> Atualizado às 19h</div><br>
-      <strong style="color:var(--text)">{datetime.now().strftime('%d/%m/%Y %H:%M')}</strong>
+      <strong style="color:var(--text)">{datetime.now(FUSO_BR).strftime('%d/%m/%Y %H:%M')}</strong>
     </div>
   </div>
   <div class="kpi-grid">
