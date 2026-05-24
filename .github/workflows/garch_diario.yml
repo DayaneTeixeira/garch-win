@@ -1,0 +1,38 @@
+name: GARCH WIN — Atualização Diária
+
+on:
+  schedule:
+    - cron: '0 22 * * 1-5'   # 22h UTC = 19h Brasília, seg a sex
+  workflow_dispatch:           # permite rodar manualmente também
+
+jobs:
+  rodar-garch:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write          # permite commitar o HTML gerado
+
+    steps:
+      - name: Checkout repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          pip install yfinance arch pandas numpy
+
+      - name: Rodar script GARCH
+        run: |
+          python garch_win_web.py
+
+      - name: Commitar dashboard atualizado
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --staged --quiet || git commit -m "Dashboard atualizado — $(date '+%d/%m/%Y %H:%M')"
+          git push
