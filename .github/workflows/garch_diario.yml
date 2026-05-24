@@ -27,7 +27,7 @@ jobs:
 
       - name: Rodar script GARCH
         run: |
-          python garch_win_web.py
+          python garch_win_github.py
 
       - name: Commitar dashboard atualizado
         run: |
