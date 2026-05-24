@@ -10,7 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write          # permite commitar o HTML gerado
+      contents: write
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout repositório
@@ -22,17 +28,19 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar dependências
-        run: |
-          pip install yfinance arch pandas numpy
+        run: pip install yfinance arch pandas numpy
 
       - name: Rodar script GARCH
-        run: |
-          python garch_win_github.py
+        run: python garch_win_github.py
 
-      - name: Commitar dashboard atualizado
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git diff --staged --quiet || git commit -m "Dashboard atualizado — $(date '+%d/%m/%Y %H:%M')"
-          git push
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload do dashboard
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy para GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
