@@ -2,7 +2,7 @@ name: GARCH WIN — Atualização Diária
 
 on:
   schedule:
-    - cron: '0 22 * * 1-5'   # 22h UTC = 19h Brasília, seg a sex
+    - cron: '57 22 * * 1-5'   # 22h UTC = 19h Brasília, seg a sex
   workflow_dispatch:           # permite rodar manualmente também
 
 jobs:
